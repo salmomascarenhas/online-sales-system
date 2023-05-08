@@ -4,17 +4,19 @@
   "description": "Sistema de vendas online com a possibilidade de realizar pedidos com múltiplos itens, cada um deles com uma quantidade variável, calculando o frete, os impostos, aplicando um cupom de desconto e ainda interagindo com o estoque. Além disso teremos ainda fluxos de pagamento e cancelamento do pedido realizado.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@types/jest": "^29.5.1",
-    "@types/node": "^20.1.0",
-    "jest": "^29.5.0",
-    "ts-jest": "^29.1.0",
+  "devDependencies": {
+    "typescript": "^5.0.4",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
-  }
+    "ts-jest": "^29.1.0",
+    "jest": "^29.5.0",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^20.1.0"
+  },
+  "dependencies": {}
 }
