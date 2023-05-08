@@ -23,5 +23,6 @@ describe('Create Order )UseCase', () => {
             ticket: null
         })
         expect(order.products).toHaveLength(3)
+        expect(order).toHaveProperty('id')
     })
 })
