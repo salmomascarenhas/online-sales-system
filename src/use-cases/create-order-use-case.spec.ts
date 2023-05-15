@@ -21,7 +21,7 @@ describe('Create Order )UseCase', () => {
         const { order } = await sut.execute({
             description: 'Order 1',
             products,
-            ticket: null
+            discountCoupon: null
         })
         expect(order.products).toHaveLength(3)
         expect(order).toHaveProperty('id')
