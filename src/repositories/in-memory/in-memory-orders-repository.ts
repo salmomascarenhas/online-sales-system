@@ -19,7 +19,8 @@ export class InMemoryOrdersRepository implements OrdersRepository {
     async calculateTotalPriceOrder(orderId: string): Promise<number> {
         const order = await this.findById(orderId)
         const totalPrice = order.products.reduce((total, product) => total += (product.amount * product.price), 0)
-        return totalPrice
+        const discount = order.discountCoupon ? totalPrice * order.discountCoupon.percentValue : 0
+        return totalPrice - discount
     }
 
     async findById(orderId: string): Promise<Order> {
