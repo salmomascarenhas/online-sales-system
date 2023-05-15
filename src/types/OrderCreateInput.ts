@@ -6,5 +6,5 @@ export type OrderCreateInput = {
     id?: string
     description: string
     products: Product[]
-    ticket?: DiscountCoupon | null
+    discountCoupon?: DiscountCoupon | null
 }

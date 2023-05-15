@@ -1,13 +1,13 @@
 import { Order } from '../entities/Order'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { Product } from '../entities/Product'
-import { Ticket } from '../entities/DiscountCoupon'
+import { DiscountCoupon } from '../entities/DiscountCoupon'
 
 
 interface CreateOrderUseCaseRequest {
     description: string
     products: Product[]
-    ticket: Ticket | null
+    discountCoupon: DiscountCoupon | null
 }
 
 interface CreateOrderUseCaseReponse {
@@ -20,12 +20,12 @@ export class CreateOrderUsecase {
     async execute({
         description,
         products,
-        ticket
+        discountCoupon
     }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseReponse> {
         const order = await this.ordersRepository.create({
             description,
             products,
-            ticket
+            discountCoupon
         })
 
         return { order }

@@ -10,7 +10,7 @@ export class InMemoryOrdersRepository implements OrdersRepository {
             id: data.id ?? randomUUID(),
             description: data.description,
             products: data.products,
-            discountCoupon: data.ticket
+            discountCoupon: data.discountCoupon
         }
         this.items.push(order)
         return order
