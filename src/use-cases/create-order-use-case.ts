@@ -1,7 +1,7 @@
 import { Order } from '../entities/Order'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { Product } from '../entities/Product'
-import { Ticket } from '../entities/Ticket'
+import { Ticket } from '../entities/DiscountCoupon'
 
 
 interface CreateOrderUseCaseRequest {

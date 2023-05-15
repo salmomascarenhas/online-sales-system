@@ -1,7 +1,7 @@
 import { Order } from '@/entities/Order'
 import { OrdersRepository } from '../orders-repository'
 import { randomUUID } from 'crypto'
-import { OrderCreateInput } from '@/types/Order'
+import { OrderCreateInput } from '@/types/OrderCreateInput'
 
 export class InMemoryOrdersRepository implements OrdersRepository {
     public items: Order[] = []
@@ -10,7 +10,7 @@ export class InMemoryOrdersRepository implements OrdersRepository {
             id: data.id ?? randomUUID(),
             description: data.description,
             products: data.products,
-            ticket: data.ticket
+            discountCoupon: data.ticket
         }
         this.items.push(order)
         return order

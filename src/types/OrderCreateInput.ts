@@ -1,10 +1,10 @@
 import { Product } from "@/entities/Product"
-import { Ticket } from "@/entities/Ticket"
+import { DiscountCoupon } from "@/entities/DiscountCoupon"
 
 
 export type OrderCreateInput = {
     id?: string
     description: string
     products: Product[]
-    ticket?: Ticket | null
+    ticket?: DiscountCoupon | null
 }

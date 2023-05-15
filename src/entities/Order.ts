@@ -1,9 +1,9 @@
 import { Product } from './Product'
-import { Ticket } from './Ticket'
+import { DiscountCoupon } from './DiscountCoupon'
 
 export type Order = {
     id: string
     description: string
     products: Product[]
-    ticket?: Ticket | null
+    discountCoupon?: DiscountCoupon | null
 }

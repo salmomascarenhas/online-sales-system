@@ -1,4 +1,4 @@
-import { OrderCreateInput } from '@/types/Order'
+import { OrderCreateInput } from '@/types/OrderCreateInput'
 import { Order } from '../entities/Order'
 export interface OrdersRepository {
     calculateTotalPriceOrder(orderId: string): Promise<number>
