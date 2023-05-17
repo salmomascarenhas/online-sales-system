@@ -1,60 +1,49 @@
-// @ts-nocheck
-export function validate(str) {
-    if (str !== null) {
-        if (str !== undefined) {
-            if (str.length >= 11 || str.length <= 14) {
+export class CPFValidate {
+    public isValid(cpf: string): boolean {
+        if (!cpf || cpf.length < 11 || cpf.length > 14) return false
+        const cpfWithoutMask = this.removeMask(cpf)
+        if (this.hasSameDigit(cpfWithoutMask)) return false
+        const calculatedDigits = this.calculateDigits(cpfWithoutMask)
+        const verificationDigits = cpfWithoutMask.substring(9, 11)
+        return calculatedDigits === verificationDigits
+    }
 
-                str = str
-                    .replace('.', '')
-                    .replace('.', '')
-                    .replace('-', '')
-                    .replace(" ", "")
+    private removeMask(cpf: string): string {
+        return cpf
+            .replace('.', '')
+            .replace('.', '')
+            .replace('-', '')
+            .replace(' ', '')
+    }
 
-                if (!str.split("").every(c => c === str[0])) {
-                    try {
-                        let d1, d2
-                        let dg1, dg2, rest
-                        let digito
-                        let nDigResult
-                        d1 = d2 = 0
-                        dg1 = dg2 = rest = 0
+    private hasSameDigit(cpf: string): boolean {
+        return cpf.split("").every(c => c === cpf[0])
+    }
 
-                        for (let nCount = 1; nCount < str.length - 1; nCount++) {
-                            // if (isNaN(parseInt(str.substring(nCount -1, nCount)))) {
-                            // 	return false;
-                            // } else {
+    private calculateDigits(cpf: string): string {
+        const firstDigit = this.calculateFirstDigit(cpf)
+        const secondDigit = this.calculateSecondDigit(cpf, firstDigit)
+        return `${firstDigit}${secondDigit}`
+    }
 
-                            digito = parseInt(str.substring(nCount - 1, nCount))
-                            d1 = d1 + (11 - nCount) * digito
-
-                            d2 = d2 + (12 - nCount) * digito
-                            // }
-                        };
-
-                        rest = (d1 % 11)
-
-                        dg1 = (rest < 2) ? dg1 = 0 : 11 - rest
-                        d2 += 2 * dg1
-                        rest = (d2 % 11)
-                        if (rest < 2)
-                            dg2 = 0
-                        else
-                            dg2 = 11 - rest
-
-                        let nDigVerific = str.substring(str.length - 2, str.length)
-                        nDigResult = "" + dg1 + "" + dg2
-                        return nDigVerific == nDigResult
-                    } catch (e) {
-                        console.error("Erro !" + e)
-
-                        return false
-                    }
-                } else return false
-
-            } else return false
+    private calculateFirstDigit(cpf: string): string {
+        let sum = 0
+        for (let position = 0; position < 9; position++) {
+            const digit = parseInt(cpf.charAt(position))
+            sum += (10 - position) * digit
         }
+        const remainder = sum % 11
+        return remainder < 2 ? '0' : String(11 - remainder)
+    }
 
-
-    } else return false
-
+    private calculateSecondDigit(cpf: string, firstDigit: string): string {
+        let sum = 0
+        for (let position = 0; position < 10; position++) {
+            const digit = parseInt(cpf.charAt(position))
+            sum += (11 - position) * digit
+        }
+        sum += 2 * parseInt(firstDigit)
+        const remainder = sum % 11
+        return remainder < 2 ? '0' : String(11 - remainder)
+    }
 }
