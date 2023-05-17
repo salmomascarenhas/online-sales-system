@@ -18,7 +18,12 @@ describe(' Calculate Total Price Order UseCase', () => {
             { id: randomUUID(), amount: 2, price: 200, description: 'Product 2' },
             { id: randomUUID(), amount: 3, price: 100, description: 'Product 3' }
         ]
-        const order = await orderRepository.create({ description: 'Order 1', products, discountCoupon: null })
+        const order = await orderRepository.create({
+            description: 'Order 1',
+            products,
+            discountCoupon: null,
+            cpf: '364.303.290-03'
+        })
         const { totalPrice } = await sut.execute({ orderId: order.id })
         expect(totalPrice).toBe(1 * 100 + 2 * 200 + 3 * 100)
     })
@@ -34,7 +39,8 @@ describe(' Calculate Total Price Order UseCase', () => {
             {
                 description: 'Order 1',
                 products,
-                discountCoupon
+                discountCoupon,
+                cpf: '364.303.290-03'
             })
         const { totalPrice } = await sut.execute({ orderId: order.id })
         expect(order.products).toHaveLength(3)
