@@ -2,6 +2,7 @@ import { Order } from '@/entities/Order'
 import { OrdersRepository } from '../orders-repository'
 import { randomUUID } from 'crypto'
 import { OrderCreateInput } from '@/types/OrderCreateInput'
+import { validate } from '../../utils/cpf-validate'
 
 export class InMemoryOrdersRepository implements OrdersRepository {
     public items: Order[] = []
@@ -10,8 +11,12 @@ export class InMemoryOrdersRepository implements OrdersRepository {
             id: data.id ?? randomUUID(),
             description: data.description,
             products: data.products,
-            discountCoupon: data.discountCoupon
+            discountCoupon: data.discountCoupon,
+            cpf: data.cpf
         }
+        const isCPFvalid = validate(order.cpf)
+        if (!isCPFvalid)
+            throw new Error('Invalid CPF')
         this.items.push(order)
         return order
     }
