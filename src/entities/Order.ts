@@ -6,4 +6,5 @@ export type Order = {
     description: string
     products: Product[]
     discountCoupon?: DiscountCoupon | null
+    cpf: string
 }

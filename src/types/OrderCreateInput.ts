@@ -7,4 +7,5 @@ export type OrderCreateInput = {
     description: string
     products: Product[]
     discountCoupon?: DiscountCoupon | null
+    cpf: string
 }

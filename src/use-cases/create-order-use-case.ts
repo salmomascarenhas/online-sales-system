@@ -7,7 +7,8 @@ import { DiscountCoupon } from '../entities/DiscountCoupon'
 interface CreateOrderUseCaseRequest {
     description: string
     products: Product[]
-    discountCoupon: DiscountCoupon | null
+    discountCoupon: DiscountCoupon | null,
+    cpf: string
 }
 
 interface CreateOrderUseCaseReponse {
@@ -20,14 +21,15 @@ export class CreateOrderUsecase {
     async execute({
         description,
         products,
-        discountCoupon
+        discountCoupon,
+        cpf
     }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseReponse> {
         const order = await this.ordersRepository.create({
             description,
             products,
-            discountCoupon
+            discountCoupon,
+            cpf
         })
-
         return { order }
     }
 }
