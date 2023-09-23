@@ -3,6 +3,7 @@ import { OrdersRepository } from '../orders-repository'
 import { randomUUID } from 'crypto'
 import { OrderCreateInput } from '@/types/OrderCreateInput'
 import { isValidCPF } from '../../utils/cpf-validate'
+import { Product } from '../../entities/Product'
 
 export class InMemoryOrdersRepository implements OrdersRepository {
     public items: Order[] = []
@@ -14,7 +15,7 @@ export class InMemoryOrdersRepository implements OrdersRepository {
             discountCoupon: data.discountCoupon,
             cpf: data.cpf
         }
-        const isCPFvalid = isValidCPF(order.cpf)
+        const isCPFvalid : boolean = isValidCPF(order.cpf)
         if (!isCPFvalid)
             throw new Error('Invalid CPF')
         this.items.push(order)
@@ -23,13 +24,13 @@ export class InMemoryOrdersRepository implements OrdersRepository {
 
     async calculateTotalPriceOrder(orderId: string): Promise<number> {
         const order = await this.findById(orderId)
-        const totalPrice = order.products.reduce((total, product) => total += (product.amount * product.price), 0)
-        const discount = order.discountCoupon ? totalPrice * order.discountCoupon.percentValue : 0
+        const totalPrice : number = order.products.reduce((total : number, product : Product) : number => total += (product.amount * product.price), 0)
+        const discount : number = order.discountCoupon ? totalPrice * order.discountCoupon.percentValue : 0
         return totalPrice - discount
     }
 
     async findById(orderId: string): Promise<Order> {
-        const order = this.items.find(order => order.id === orderId)
+        const order: Order | undefined = this.items.find((order : Order) : boolean => order.id === orderId)
         if (!order)
             throw new Error('Order not found')
         return order
