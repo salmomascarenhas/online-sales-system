@@ -1,68 +1,60 @@
-import ValueObject from "./value-objects";
+import ValueObject from './value-objects';
 
 export class InvalidCPFError extends Error {
   constructor() {
-    super("Invalid CPF");
-    this.name = "InvalidCPFError";
+    super('Invalid CPF');
+    this.name = 'InvalidCPFError';
+  }
+}
+
+class CPFValidator {
+  private static readonly CPF_LENGTH = 11;
+
+  private static sanitizeCpf(cpf: string): string {
+    return cpf.replace(/\D/g, '');
+  }
+
+  private static areAllDigitsEqual(cpf: string): boolean {
+    return /^(\d)\1{10}$/.test(cpf);
+  }
+
+  private static calculateVerifierDigit(cpf: string, position: number): number {
+    let sum = 0;
+
+    for (let i = 0; i < position; i++) {
+      sum += parseInt(cpf[i]) * (position + 1 - i);
+    }
+
+    const remainder = (sum * 10) % 11;
+
+    return remainder === 10 ? 0 : remainder;
+  }
+
+  static isValid(cpf: string): boolean {
+    cpf = this.sanitizeCpf(cpf);
+
+    if (cpf.length !== this.CPF_LENGTH) {
+      return false;
+    }
+
+    if (this.areAllDigitsEqual(cpf)) {
+      return false;
+    }
+
+    const firstVerifierDigit = this.calculateVerifierDigit(cpf, 9);
+    const secondVerifierDigit = this.calculateVerifierDigit(cpf, 10);
+
+    return (
+      parseInt(cpf[9]) === firstVerifierDigit && parseInt(cpf[10]) === secondVerifierDigit
+    );
   }
 }
 
 export class CPF extends ValueObject<string> {
-  constructor(CPF: string) {
-    super(CPF);
-    this.validate();
-  }
-
-  private validateCPFString(cpfWithoutMask: string): void {
-    if (!/^\d{11}$/.test(cpfWithoutMask) || this.hasSameDigit(cpfWithoutMask))
-      throw new InvalidCPFError();
-    if (cpfWithoutMask.length !== 11) throw new InvalidCPFError();
-  }
-
-  private validate(): void {
-    const cpfWithoutMask: string = this.removeMask(this.value);
-    this.validateCPFString(cpfWithoutMask);
-    const calculatedDigits: string = this.calculateDigits(cpfWithoutMask);
-    const verificationDigits: string = cpfWithoutMask.substring(9, 11);
-    const isValid: boolean = calculatedDigits === verificationDigits;
-    if (!isValid) {
+  constructor(cpf: string) {
+    super(cpf);
+    if (!CPFValidator.isValid(this.value)) {
       throw new InvalidCPFError();
     }
-  }
-
-  private hasSameDigit(cpf: string): boolean {
-    const firstDigit = cpf[0];
-    return cpf.split("").every((digit) => digit === firstDigit);
-  }
-
-  private removeMask(cpf: string): string {
-    return cpf.replace(/[.-\s]/g, "");
-  }
-
-  private calculateDigits(cpf: string): string {
-    const firstDigit: string = this.calculateFirstDigit(cpf);
-    const secondDigit: string = this.calculateSecondDigit(cpf, firstDigit);
-    return `${firstDigit}${secondDigit}`;
-  }
-
-  private calculateFirstDigit(cpf: string): string {
-    let sum: number = 0;
-    for (let position: number = 0; position < 9; position++) {
-      const digit: number = parseInt(cpf.charAt(position));
-      sum += (10 - position) * digit;
-    }
-    const remainder: number = sum % 11;
-    return remainder < 2 ? "0" : String(11 - remainder);
-  }
-
-  private calculateSecondDigit(cpf: string, firstDigit: string): string {
-    let sum: number = 0;
-    for (let position: number = 0; position < 10; position++) {
-      const digit: number = parseInt(cpf.charAt(position));
-      sum += (11 - position) * digit;
-    }
-    sum += 2 * parseInt(firstDigit);
-    const remainder: number = sum % 11;
-    return remainder < 2 ? "0" : String(11 - remainder);
   }
 }
