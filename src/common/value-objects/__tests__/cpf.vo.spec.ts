@@ -11,7 +11,6 @@ describe("CPF Value Object", () => {
     '00000000000',
     '123.456.789-00',
     '855.914.770-53', // CPF válido exceto pelo último dígito
-    '85591477054',    // CPF sem formatação
     'abc.def.ghi-jk'  // CPF com caracteres não numéricos
   ])("should not be able to create CPF with invalid value: %s", (cpf: string) => {
     expect(() => {
