@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { Product } from '../entities/Product'
 import { InMemoryOrdersRepository } from '../repositories/in-memory/in-memory-orders-repository'
 import { CreateOrderUsecase } from './create-order-use-case'
+import { CPF } from '../common/value-objects/cpf.vo'
 
 let orderRepository: InMemoryOrdersRepository
 let sut: CreateOrderUsecase
@@ -22,7 +23,7 @@ describe('Create Order )UseCase', () => {
             description: 'Order 1',
             products,
             discountCoupon: null,
-            cpf: '364.303.290-03'
+            cpf: new CPF('364.303.290-03')
         })
         expect(order.products).toHaveLength(3)
         expect(order).toHaveProperty('id')
@@ -34,11 +35,12 @@ describe('Create Order )UseCase', () => {
             { id: randomUUID(), amount: 2, price: 200, description: 'Product 2' },
             { id: randomUUID(), amount: 3, price: 100, description: 'Product 3' }
         ]
-        await expect(sut.execute({
+        await expect(new CPF('364.303.290-00')).rejects.toThrowError(Error('Invalid CPF'))
+        expect(sut.execute({
             description: 'Order 1',
             products,
             discountCoupon: null,
-            cpf: '364.303.290-00'
+            cpf: new CPF('364.303.290-00')
         })).rejects.toThrowError('Invalid CPF')
     })
 })

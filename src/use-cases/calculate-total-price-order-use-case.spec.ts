@@ -2,6 +2,7 @@ import { InMemoryOrdersRepository } from '../repositories/in-memory/in-memory-or
 import { CalculateTotalPriceOrderUseCase } from "./calculate-total-price-order-use-case"
 import { randomUUID } from 'node:crypto'
 import { Product } from '@/entities/Product'
+import { CPF } from '../common/value-objects/cpf.vo'
 
 let orderRepository: InMemoryOrdersRepository
 let sut: CalculateTotalPriceOrderUseCase
@@ -22,7 +23,7 @@ describe(' Calculate Total Price Order UseCase', () => {
             description: 'Order 1',
             products,
             discountCoupon: null,
-            cpf: '364.303.290-03'
+            cpf: new CPF('364.303.290-03')
         })
         const { totalPrice } = await sut.execute({ orderId: order.id })
         expect(totalPrice).toBe(1 * 100 + 2 * 200 + 3 * 100)
@@ -40,7 +41,7 @@ describe(' Calculate Total Price Order UseCase', () => {
                 description: 'Order 1',
                 products,
                 discountCoupon,
-                cpf: '364.303.290-03'
+                cpf: new CPF('364.303.290-03')
             })
         const { totalPrice } = await sut.execute({ orderId: order.id })
         expect(order.products).toHaveLength(3)

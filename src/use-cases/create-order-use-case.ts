@@ -2,13 +2,14 @@ import { Order } from '../entities/Order'
 import { OrdersRepository } from '../repositories/orders-repository'
 import { Product } from '../entities/Product'
 import { DiscountCoupon } from '../entities/DiscountCoupon'
+import { CPF } from '../common/value-objects/cpf.vo'
 
 
 interface CreateOrderUseCaseRequest {
     description: string
     products: Product[]
     discountCoupon: DiscountCoupon | null,
-    cpf: string
+    cpf: CPF
 }
 
 interface CreateOrderUseCaseReponse {
