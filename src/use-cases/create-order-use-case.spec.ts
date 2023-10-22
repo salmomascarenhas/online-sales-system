@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { Product } from '../entities/Product'
 import { InMemoryOrdersRepository } from '../repositories/in-memory/in-memory-orders-repository'
 import { CreateOrderUsecase } from './create-order-use-case'
-import { CPF } from '../common/value-objects/cpf.vo'
+import { CPF, InvalidCPFError } from '../common/value-objects/cpf.vo'
 
 let orderRepository: InMemoryOrdersRepository
 let sut: CreateOrderUsecase
@@ -35,12 +35,17 @@ describe('Create Order )UseCase', () => {
             { id: randomUUID(), amount: 2, price: 200, description: 'Product 2' },
             { id: randomUUID(), amount: 3, price: 100, description: 'Product 3' }
         ]
-        await expect(new CPF('364.303.290-00')).rejects.toThrowError(Error('Invalid CPF'))
-        expect(sut.execute({
+        try {
+        const order = sut.execute({
             description: 'Order 1',
             products,
             discountCoupon: null,
-            cpf: new CPF('364.303.290-00')
-        })).rejects.toThrowError('Invalid CPF')
+            cpf: new CPF('364.303.290-04')
+        });
+        // Se chegou aqui, o CPF é válido, o que é um erro neste teste.
+        fail('Expected an InvalidCPFError');
+        } catch (error) {
+        expect(error).toBeInstanceOf(InvalidCPFError);
+        }
     })
 })
